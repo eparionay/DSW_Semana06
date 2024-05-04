@@ -16,21 +16,36 @@
     <div class="row mt-4">
       <div class="col-md-4">
         <form>
+
           <div class="form-group">
-            <label for="txtCodigo">Id</label>
-            <input type="text" class="form-control" id="txtCodigo" placeholder="Id">
+            <label for="txtCodigo">Codigo</label>
+            <input type="text" class="form-control" id="txtCodigo" >
           </div>
+
           <div class="form-group">
-            <label for="txtNombre">Titulo</label>
-            <input type="text" class="form-control" id="txtTitulo" placeholder="Titulo">
+            <label for="txtNombre">Nombre</label>
+            <input type="text" class="form-control" id="txtNombre">
           </div>
+
           <div class="form-group">
-            <label for="txtApellido">Vistas</label>
-            <input type="text" class="form-control" id="txtVistas" placeholder="Vistas">
+            <label for="txtApellido">Ap. Paterno</label>
+            <input type="text" class="form-control" id="txtPaterno" >
+          </div>
+
+          <div class="form-group">
+            <label for="txtApellido">Ap. Materno</label>
+            <input type="text" class="form-control" id="txtMaterno" >
+          </div>
+
+          <div class="form-group">
+            <label for="txtApellido">Documento</label>
+            <input type="text" class="form-control" id="txtDocumento" >
           </div>
          
           <button type="button" class="btn btn-primary" onclick="guardar();">Guardar</button>
           <button type="button" class="btn btn-danger" onclick="cancelar();">Cancelar</button>
+        
+        
         </form>
       </div>
 
@@ -39,9 +54,11 @@
         <table class="table">
           <thead class="thead-dark">
             <tr>
-              <th scope="col">Id</th>
-              <th scope="col">Titulo</th>
-              <th scope="col">Vistas</th>
+              <th scope="col">Codigo</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Ap. Paterno</th>
+              <th scope="col">Ap. Materno</th>
+              <th scope="col">Documento</th>
               <th scope="col">Opciones</th>
             </tr>
           </thead>
@@ -54,13 +71,28 @@
 
 </body>
 <script type="text/javascript">
- 
+  cargarDatos();
+
+  function cargarDatos(){
+
+    fetch("https://localhost:44343/api/alumno/lista")
+         .then( response => response.text() )
+         .then(
+            data => {
+              console.log(data);
+            })
+  } // fin cargarDatos
 
   function guardar() {
                
   }
 
   function cancelar() {
+    document.getElementById("txtCodigo").value = "";
+    document.getElementById("txtNombre").value = "";
+    document.getElementById("txtPaterno").value= "";
+    document.getElementById("txtMaterno").value = "";
+    document.getElementById("txtDocumento").value = "";
 
   }
 
