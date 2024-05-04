@@ -79,6 +79,7 @@
   let ES_EDITAR= false;
 
   function cargarDatos(){
+    console.log("Entrando a funcion cargarDatos");
     fetch("https://localhost:44343/api/alumno/lista")
          .then( response => response.json() )
          .then(
@@ -154,11 +155,6 @@
       }else if(nombre=== ""){
         alertify.notify("Ingrese el nombre", 'warning', 5, function(){  console.log('dismissed'); });
       }
-      
-      
-      
-      
-      
       else{
           let url;
           let metodo;
@@ -191,10 +187,14 @@
           .then(
             data => {
               console.log(data);
-              if (data.codigo === "1"){
-                alertify.notify(data.mensaje, 'success', 5, function(){  console.log('dismissed'); });
+              if (parseInt(data.codigo) === 1){
                 limpiar();
                 cargarDatos();
+                alertify.notify(data.mensaje, 'success', 5, function(){  console.log('dismissed'); });
+                
+                console.log("Limpiando datos de input");
+               
+                console.log("Entrando a funcion cargarDatos desde boton guardar");
               }else{
                 alertify.notify(data.mensaje, 'success', 5, function(){  console.log('dismissed'); });
               }

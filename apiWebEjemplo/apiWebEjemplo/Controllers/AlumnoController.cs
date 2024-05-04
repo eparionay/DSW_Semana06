@@ -96,6 +96,9 @@ namespace apiWebEjemplo.Controllers
         public ResponseServer eliminar(int codigo)
         {
             ResponseServer rptaServidor = new ResponseServer();
+
+
+
             return rptaServidor;
         }
 
