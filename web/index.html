@@ -44,7 +44,7 @@
           </div>
          
           <button type="button" class="btn btn-primary" onclick="guardar();">Guardar</button>
-          <button type="button" class="btn btn-danger" onclick="cancelar();">Cancelar</button>
+          <button type="button" class="btn btn-danger" onclick="limpiar();">Cancelar</button>
         
         
         </form>
@@ -76,6 +76,7 @@
 
 <script type="text/javascript">
   cargarDatos();
+  let ES_EDITAR= false;
 
   function cargarDatos(){
     fetch("https://localhost:44343/api/alumno/lista")
@@ -109,6 +110,7 @@
   } // fin mostrarDatos
 
   function editar(posicion){
+      ES_EDITAR= true;
       let codigo = document.getElementById("tbody_datos").rows[posicion].cells[0].innerHTML;
       let nombres = document.getElementById("tbody_datos").rows[posicion].cells[1].innerHTML;
       let paterno = document.getElementById("tbody_datos").rows[posicion].cells[2].innerHTML;
@@ -125,7 +127,7 @@
   }
 
   function eliminar(posicion){
-    alertify.confirm('¿Deseas eliminar el registro?s', 
+    alertify.confirm('¿Deseas eliminar el registro?', 
                       function(){ 
                         fn_eliminar(posicion);
                         alertify.success('Se realizo.') }, 
@@ -140,16 +142,77 @@
 
 
   function guardar() {
-               
-  }
+      let codigo = document.getElementById("txtCodigo").value;
+      let nombre = document.getElementById("txtNombre").value;
+      let paterno = document.getElementById("txtPaterno").value;
+      let materno = document.getElementById("txtMaterno").value;
+      let documento = document.getElementById("txtDocumento").value;
 
-  function cancelar() {
+
+      if (codigo === ""){
+        alertify.notify("Ingrese el codigo", 'warning', 5, function(){  console.log('dismissed'); });
+      }else if(nombre=== ""){
+        alertify.notify("Ingrese el nombre", 'warning', 5, function(){  console.log('dismissed'); });
+      }
+      
+      
+      
+      
+      
+      else{
+          let url;
+          let metodo;
+          if (ES_EDITAR){
+            url = "https://localhost:44343/api/alumno/actualizar";
+            metodo= "PUT";
+          }else{
+            metodo= "POST";
+            url = "https://localhost:44343/api/alumno/registrar";
+          }
+
+
+          let opciones ={
+            method: metodo,
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body : JSON.stringify({
+              "Codigo": codigo,
+              "Nombre": nombre,
+              "ApellidoPaterno": paterno,
+              "Genero": "I",
+              "ApellidoMaterno": materno,
+              "Documento": documento
+            })
+          }
+
+          fetch(url, opciones)
+          .then(response => response.json())
+          .then(
+            data => {
+              console.log(data);
+              if (data.codigo === "1"){
+                alertify.notify(data.mensaje, 'success', 5, function(){  console.log('dismissed'); });
+                limpiar();
+                cargarDatos();
+              }else{
+                alertify.notify(data.mensaje, 'success', 5, function(){  console.log('dismissed'); });
+              }
+            }
+          )       
+      } // fin else
+
+
+        
+  } // fin guardar
+
+  function limpiar() {
     document.getElementById("txtCodigo").value = "";
     document.getElementById("txtNombre").value = "";
     document.getElementById("txtPaterno").value= "";
     document.getElementById("txtMaterno").value = "";
     document.getElementById("txtDocumento").value = "";
-
+    ES_EDITAR= false;
   }
 
 </script>
