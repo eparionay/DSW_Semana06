@@ -96,9 +96,20 @@ namespace apiWebEjemplo.Controllers
         public ResponseServer eliminar(int codigo)
         {
             ResponseServer rptaServidor = new ResponseServer();
-
-
-
+            ServiceAlumno serviceAlumno = new ServiceAlumno();
+            Alumno objAlumno = new Alumno();
+            objAlumno.Codigo = codigo;
+            int operacion = serviceAlumno.operacionAlumno("eliminarxId", objAlumno);
+            if (operacion == 1)
+            {
+                rptaServidor.mensaje = "Se actualizo correctamente.";
+                rptaServidor.codigo = 1;
+            }
+            else
+            {
+                rptaServidor.mensaje = "Hubo un error al procesar solicitud.";
+                rptaServidor.codigo = 0;
+            }
             return rptaServidor;
         }
 

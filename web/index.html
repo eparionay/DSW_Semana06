@@ -131,14 +131,35 @@
     alertify.confirm('¿Deseas eliminar el registro?', 
                       function(){ 
                         fn_eliminar(posicion);
-                        alertify.success('Se realizo.') }, 
+                        /*alertify.success('Se realizo.')*/ }, 
                       function(){}
                     );
-  }
+  }// fin eliminar
 
   function fn_eliminar(posicion){
-    let codigo = document.getElementById("tbody_datos").rows[posicion].cells[0].innerHTML;
-  }
+      console.log("entrando a fn_eliminar");
+      let codigo = document.getElementById("tbody_datos").rows[posicion].cells[0].innerHTML;
+
+      let opciones = {
+        method: "DELETE"
+      }
+
+      fetch("https://localhost:44343/api/alumno/eliminar/"+ codigo, opciones)
+      .then(response => response.json())
+      .then(
+        data =>{
+          console.log(data);
+          if (parseInt(data.codigo)=== 1){
+               cargarDatos();
+               alertify.notify(data.mensaje, 'success', 5, function(){  console.log('dismissed'); });
+          }else{
+               alertify.notify(data.mensaje, 'error', 5, function(){  console.log('dismissed'); });
+          }
+        }
+      )
+
+
+  }// fin fn_eliminar
 
 
 
@@ -191,12 +212,8 @@
                 limpiar();
                 cargarDatos();
                 alertify.notify(data.mensaje, 'success', 5, function(){  console.log('dismissed'); });
-                
-                console.log("Limpiando datos de input");
-               
-                console.log("Entrando a funcion cargarDatos desde boton guardar");
               }else{
-                alertify.notify(data.mensaje, 'success', 5, function(){  console.log('dismissed'); });
+                alertify.notify(data.mensaje, 'error', 5, function(){  console.log('dismissed'); });
               }
             }
           )       
